@@ -534,9 +534,9 @@ eve: $(BIOS_IMG) $(EFI_PART) $(CONFIG_IMG) $(PERSIST_IMG) $(INITRD_IMG) $(INSTAL
 	$(QUIET): "$@: Begin: EVE_REL=$(EVE_REL), HV=$(HV), LINUXKIT_PKG_TARGET=$(LINUXKIT_PKG_TARGET)"
 	cp images/*.yml $|
 	$(PARSE_PKGS) pkg/eve/Dockerfile.in > $|/Dockerfile
-	$(LINUXKIT) $(DASH_V) pkg $(LINUXKIT_PKG_TARGET) --disable-content-trust --hash-path $(CURDIR) --hash $(ROOTFS_VERSION)-$(HV) $(if $(strip $(EVE_REL)),--release) $(EVE_REL)$(if $(strip $(EVE_REL)),-$(HV)) $(FORCE_BUILD) $|
+	$(LINUXKIT) $(DASH_V) pkg $(LINUXKIT_PKG_TARGET) --hash-path $(CURDIR) --hash $(ROOTFS_VERSION)-$(HV) $(if $(strip $(EVE_REL)),--release) $(EVE_REL)$(if $(strip $(EVE_REL)),-$(HV)) $(FORCE_BUILD) $|
 	$(QUIET)if [ -n "$(EVE_REL)" ] && [ $(HV) = $(HV_DEFAULT) ]; then \
-	   $(LINUXKIT) $(DASH_V) pkg $(LINUXKIT_PKG_TARGET) --disable-content-trust --hash-path $(CURDIR) --hash $(EVE_REL)-$(HV) --release $(EVE_REL) $(FORCE_BUILD) $| ;\
+	   $(LINUXKIT) $(DASH_V) pkg $(LINUXKIT_PKG_TARGET) --hash-path $(CURDIR) --hash $(EVE_REL)-$(HV) --release $(EVE_REL) $(FORCE_BUILD) $| ;\
 	fi
 	$(QUIET): $@: Succeeded
 
