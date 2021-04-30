@@ -229,7 +229,7 @@ PARSE_PKGS=$(if $(strip $(EVE_HASH)),EVE_HASH=)$(EVE_HASH) DOCKER_ARCH_TAG=$(DOC
 LINUXKIT=$(BUILDTOOLS_BIN)/linuxkit
 LINUXKIT_VERSION=2acc1c013c9c52ce6e9dd50a24fb204a4d08d86e
 LINUXKIT_SOURCE=https://github.com/linuxkit/linuxkit.git
-LINUXKIT_OPTS=--disable-content-trust $(if $(strip $(EVE_HASH)),--hash) $(EVE_HASH) $(if $(strip $(EVE_REL)),--release) $(EVE_REL) $(FORCE_BUILD)
+LINUXKIT_OPTS= $(if $(strip $(EVE_HASH)),--hash) $(EVE_HASH) $(if $(strip $(EVE_REL)),--release) $(EVE_REL) $(FORCE_BUILD)
 LINUXKIT_PKG_TARGET=build
 RESCAN_DEPS=FORCE
 FORCE_BUILD=--force
