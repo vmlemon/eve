@@ -6,7 +6,7 @@
 
 # you are not supposed to tweak these variables -- they are effectively R/O
 HV_DEFAULT=kvm
-GOVER ?= 1.15.3
+GOVER ?= 1.16
 PKGBASE=github.com/lf-edge/eve
 GOMODULE=$(PKGBASE)/pkg/pillar
 GOTREE=$(CURDIR)/pkg/pillar
@@ -277,7 +277,6 @@ $(CURRENT_DIR): $(DIST)
 currentversion:
 	#echo $(shell readlink $(CURRENT) | sed -E 's/rootfs-(.*)\.[^.]*$/\1/')
 	@cat $(CURRENT_DIR)/installer/eve_version
-
 
 .PHONY: currentversion
 
