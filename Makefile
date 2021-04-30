@@ -663,10 +663,6 @@ $(ROOTFS_FULL_NAME)-%-$(ZARCH).$(ROOTFS_FORMAT): $(ROOTFS_IMG)
 %-show-tag:
 	@$(LINUXKIT) pkg show-tag pkg/$*
 
-%Gopkg.lock: %Gopkg.toml | $(GOBUILDER)
-	@$(DOCKER_GO) "dep ensure -update $(GODEP_NAME)" $(dir $@)
-	@echo Done updating $@
-
 docker-old-images:
 	./tools/oldimages.sh
 
