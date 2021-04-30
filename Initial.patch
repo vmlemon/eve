@@ -1,0 +1,51 @@
+diff --git a/Makefile b/Makefile
+index d820725fc..c3e2c9349 100644
+--- a/Makefile
++++ b/Makefile
+@@ -6,7 +6,8 @@
+ 
+ # you are not supposed to tweak these variables -- they are effectively R/O
+ HV_DEFAULT=kvm
+-GOVER ?= 1.15.3
++#GOVER ?= 1.15.3
++GOVER ?= 1.16
+ PKGBASE=github.com/lf-edge/eve
+ GOMODULE=$(PKGBASE)/pkg/pillar
+ GOTREE=$(CURDIR)/pkg/pillar
+@@ -227,7 +228,8 @@ DOCKER_GO = _() { $(SET_X); mkdir -p $(CURDIR)/.go/src/$${3:-dummy} ; mkdir -p $
+ 
+ PARSE_PKGS=$(if $(strip $(EVE_HASH)),EVE_HASH=)$(EVE_HASH) DOCKER_ARCH_TAG=$(DOCKER_ARCH_TAG) ./tools/parse-pkgs.sh
+ LINUXKIT=$(BUILDTOOLS_BIN)/linuxkit
+-LINUXKIT_VERSION=80c4edd5c54dc05fbeae932440372990fce39bd6
++LINUXKIT_VERSION=a8797a5e0f05b13dac3624f3f4b2294d50e47b76
++#LINUXKIT_VERSION=80c4edd5c54dc05fbeae932440372990fce39bd6
+ LINUXKIT_SOURCE=https://github.com/linuxkit/linuxkit.git
+ LINUXKIT_OPTS=--disable-content-trust $(if $(strip $(EVE_HASH)),--hash) $(EVE_HASH) $(if $(strip $(EVE_REL)),--release) $(EVE_REL) $(FORCE_BUILD)
+ LINUXKIT_PKG_TARGET=build
+@@ -664,9 +666,9 @@ $(ROOTFS_FULL_NAME)-%-$(ZARCH).$(ROOTFS_FORMAT): $(ROOTFS_IMG)
+ %-show-tag:
+        @$(LINUXKIT) pkg show-tag pkg/$*
+ 
+-%Gopkg.lock: %Gopkg.toml | $(GOBUILDER)
+-       @$(DOCKER_GO) "dep ensure -update $(GODEP_NAME)" $(dir $@)
+-       @echo Done updating $@
++#%Gopkg.lock: %Gopkg.toml | $(GOBUILDER)
++#      @$(DOCKER_GO) "dep ensure -update $(GODEP_NAME)" $(dir $@)
++#      @echo Done updating $@
+ 
+ docker-old-images:
+        ./tools/oldimages.sh
+diff --git a/build-tools/src/scripts/Dockerfile b/build-tools/src/scripts/Dockerfile
+index b9bb65563..7c5e47b5e 100644
+--- a/build-tools/src/scripts/Dockerfile
++++ b/build-tools/src/scripts/Dockerfile
+@@ -13,7 +13,7 @@ RUN deluser ${USER} ; delgroup ${GROUP} || :
+ RUN sed -ie /:${UID}:/d /etc/passwd /etc/shadow ; sed -ie /:${GID}:/d /etc/group || :
+ RUN addgroup -g ${GID} ${GROUP} && adduser -h /home/${USER} -G ${GROUP} -D -H -u ${UID} ${USER}
+ RUN echo "${USER} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
+-RUN go get github.com/golang/dep/cmd/dep
++#RUN go get github.com/golang/dep/cmd/dep
+ RUN go get -u github.com/golang/protobuf/protoc-gen-go
+ RUN go get -u gotest.tools/gotestsum
+ RUN go get -u github.com/seamia/protodot
+
