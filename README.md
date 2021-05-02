@@ -61,6 +61,9 @@ docker version
 $ brew install git make jq qemu
 ```
 
+#### On Apple Silicon (ARM64) 
+The build of QEMU 5.2.0, from Brew has an errata related to Just-In-Time code compilation being broken (running a VM fails with "```Could not allocate dynamic translator buffer```"). Please build a newer release of QEMU, from QEMU.org, or wait for this to be fixed in Brew. 
+
 ##### On Ubuntu Linux
 
 ```sh
