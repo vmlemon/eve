@@ -281,7 +281,7 @@ currentversion:
 	#echo $(shell readlink $(CURRENT) | sed -E 's/rootfs-(.*)\.[^.]*$/\1/')
 	@cat $(CURRENT_DIR)/installer/eve_version
 
-.PHONY: currentversion
+.PHONY: currentversion linuxkit
 
 test: $(GOBUILDER) | $(DIST)
 	@echo Running tests on $(GOMODULE)
