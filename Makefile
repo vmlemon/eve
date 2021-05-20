@@ -270,7 +270,7 @@ version:
 
 # makes a link to current
 current: $(CURRENT_DIR)
-$(CURRENT_DIR): $(DIST)
+$(CURRENT_DIR): $(BUILD_DIR)
 	@rm -f $@ && ln -s $(BUILD_DIR) $@
 
 # reports the image version that current points to
@@ -280,7 +280,7 @@ $(CURRENT_DIR): $(DIST)
 currentversion:
 	#echo $(shell readlink $(CURRENT) | sed -E 's/rootfs-(.*)\.[^.]*$/\1/')
 	@cat $(CURRENT_DIR)/installer/eve_version
-
+  
 .PHONY: currentversion linuxkit
 
 test: $(GOBUILDER) | $(DIST)
@@ -448,6 +448,7 @@ $(INSTALLER):
 
 
 # convenience targets - so you can do `make config` instead of `make dist/config.img`, and `make installer` instead of `make dist/amd64/installer.img
+linuxkit: $(LINUXKIT)
 build-vm: $(BUILD_VM)
 initrd: $(INITRD_IMG)
 installer-img: $(INSTALLER_IMG)
@@ -533,7 +534,8 @@ pkg/%: eve-% FORCE
 $(RUNME) $(BUILD_YML):
 	cp pkg/eve/$(@F) $@
 
-eve: $(BIOS_IMG) $(EFI_PART) $(CONFIG_IMG) $(PERSIST_IMG) $(INITRD_IMG) $(INSTALLER_IMG) $(ROOTFS_IMG) fullname-rootfs $(BOOT_PART) $(RUNME) $(BUILD_YML) current | $(BUILD_DIR)
+EVE_ARTIFACTS=$(BIOS_IMG) $(EFI_PART) $(CONFIG_IMG) $(PERSIST_IMG) $(INITRD_IMG) $(INSTALLER_IMG) $(ROOTFS_IMG) fullname-rootfs $(BOOT_PART)
+eve: $(INSTALLER) $(EVE_ARTIFACTS) current $(RUNME) $(BUILD_YML) | $(BUILD_DIR)
 	$(QUIET): "$@: Begin: EVE_REL=$(EVE_REL), HV=$(HV), LINUXKIT_PKG_TARGET=$(LINUXKIT_PKG_TARGET)"
 	cp images/*.yml $|
 	$(PARSE_PKGS) pkg/eve/Dockerfile.in > $|/Dockerfile

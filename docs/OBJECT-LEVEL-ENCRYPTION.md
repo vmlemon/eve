@@ -74,7 +74,7 @@ Following are the key agents in EVE, which are involved in implementing this sol
 
 TPM Manager creates ECDH certificates using the TPM, and also implements the glue layer to talk to [go-tpm](https://github.com/google/go-tpm) for ECDH APIs.
 
-In future, support will be added to support platforms without TPM as well. In those platforms, ECDH key-pair will be created in software, and the ECDH exchange will invoke software crypto packages instead of interacting with TPM.
+For devices without a the ECDH key-pair is created in software, and the ECDH exchange will invoke software crypto packages instead of interacting with TPM.
 
 TPM Manager publishes the device's ECDH certificate using [types.AttestCert](../pkg/pillar/types/attesttypes.go#L68) to zedagent, for sending to the controller.
 
@@ -108,7 +108,7 @@ Domain manager needs to decrypt the sensitive user data from the app instance co
 
 Domain manager passes the cipher block from the app configuration and subscription contexts of controller certificates and cipher context to the cipher package for the decryption.
 
-The user data are only kept in memory in the domainmgr, but for cloud-init it is used to create a CDROM image which is passed to the application. This CDROM image lives in /var/run/domainmgr/cloudinit which is a filesystem backed by memory.
+The user data are only kept in memory in the domainmgr, but for cloud-init it is used to create a CDROM image which is passed to the application. This CDROM image lives in `/run/domainmgr/cloudinit` which is a filesystem backed by memory.
 
 ## Refreshing of the controller certificates in EVE
 
