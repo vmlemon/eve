@@ -85,6 +85,8 @@ CROSS = 1
 $(warning "WARNING: We are assembling an $(ZARCH) image on $(HOSTARCH). Things may break.")
 endif
 
+LINUXKIT_PLATFORM_TARGET=$(shell uname -s | tr '[A-Z]' '[a-z]')/$(ZARCH)
+
 DOCKER_ARCH_TAG=$(ZARCH)
 
 FULL_VERSION:=$(ROOTFS_VERSION)-$(HV)-$(ZARCH)
