@@ -480,7 +480,7 @@ func parseAppInstanceConfig(config *zconfig.EdgeDevConfig,
 		// fill in the collect stats IP address of the App
 		appInstance.CollectStatsIPAddr = net.ParseIP(cfgApp.GetCollectStatsIPAddr())
 
-		// fill the overlay/underlay config
+		// fill the app adapter config
 		parseAppNetworkConfig(&appInstance, cfgApp, config.Networks,
 			config.NetworkInstances)
 
@@ -1545,6 +1545,7 @@ func parseUnderlayNetworkConfigEntry(
 	}
 	// XXX set ulCfg.IntfOrder from API once available
 	ulCfg.IntfOrder = intfOrder
+	ulCfg.AccessVlanID = intfEnt.AccessVlanId
 	return ulCfg
 }
 

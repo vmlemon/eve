@@ -1316,8 +1316,52 @@ func doActivateTail(ctx *domainContext, status *types.DomainStatus,
 			status.Key())
 	}
 	status.Activated = true
+	setupVlans(status.VifList)
 	log.Functionf("doActivateTail(%v) done for %s",
 		status.UUIDandVersion, status.DisplayName)
+}
+
+// VLAN filtering could have been enabled on the bridge immediately after
+// it's creation in zedrouter. For some strange reason netlink
+// throws back error stating that the device is busy if enabling the vlan
+// filtering is tried immediately after bridge creation.
+// We can either loop retrying in zedrouter or enable it when needed in domainmgr
+func enableVlanFiltering(bridgeName string) {
+	bridge, err := netlink.LinkByName(bridgeName)
+	if err != nil {
+		log.Errorf("enableVlanFiltering: LinkByName failed for %s: %s", bridgeName, err)
+		return
+	}
+	if !*bridge.(*netlink.Bridge).VlanFiltering {
+		// Enable VLAN filtering on bridge
+		if err := netlink.BridgeSetVlanFiltering(bridge, true); err != nil {
+			errStr := fmt.Sprintf("enableVlanFiltering on %s failed: %s",
+				bridgeName, err)
+			log.Errorf(errStr)
+		}
+	}
+}
+
+func setupVlans(vifList []types.VifInfo) {
+	for _, vif := range vifList {
+		bridgeName := vif.Bridge
+		enableVlanFiltering(bridgeName)
+
+		link, err := netlink.LinkByName(vif.Vif)
+		if err != nil {
+			log.Errorf("setupVlans: Vlan setup failed: %s", err)
+			return
+		}
+		if !vif.Vlan.IsTrunk {
+			netlink.BridgeVlanAdd(link, uint16(vif.Vlan.Start), true, true, false, false)
+		} else {
+			start := vif.Vlan.Start
+			end := vif.Vlan.End
+			for vlanID := start; vlanID <= end; vlanID++ {
+				netlink.BridgeVlanAdd(link, uint16(vlanID), false, false, false, false)
+			}
+		}
+	}
 }
 
 // shutdown and wait for the domain to go away; if that fails destroy and wait

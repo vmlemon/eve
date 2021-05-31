@@ -309,6 +309,7 @@ func handleNetworkInstanceCreate(
 		NetworkInstanceInfo: types.NetworkInstanceInfo{
 			IPAssignments: make(map[string]net.IP),
 			VifMetricMap:  make(map[string]types.NetworkMetric),
+			VlanMap:       make(map[uint32]uint32),
 		},
 	}
 	status.ChangeInProgress = types.ChangeInProgressTypeCreate
@@ -1353,6 +1354,9 @@ func createNetworkInstanceMetrics(ctx *zedrouterContext,
 	netMetrics.MetricList = []types.NetworkMetric{*netMetric}
 	niMetrics.NetworkMetrics = netMetrics
 	niMetrics.ProbeMetrics = getNIProbeMetric(ctx, status)
+
+	niMetrics.VlanMetrics.NumTrunkPorts = status.NumTrunkPorts
+	niMetrics.VlanMetrics.VlanCounts = status.VlanMap
 	switch status.Type {
 	case types.NetworkInstanceTypeCloud:
 		if strongSwanVpnStatusGet(ctx, status, &niMetrics) {
